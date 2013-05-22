@@ -76,6 +76,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ControlPanel.c" />
+    <ClCompile Include="Thermostat.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ControlPanel.h" />
+    <ClInclude Include="Thermostat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
