@@ -24,12 +24,36 @@
     <ClCompile Include="ThermostatTest.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ControlPanelSpy.cpp">
+    <ClCompile Include="TargetSpecificDummy.cpp">
+      <Filter>doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaterContollerSpy.cpp">
+      <Filter>doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="CoolerControllSpy.cpp">
+      <Filter>doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="FakeSensorProbe.cpp">
+      <Filter>doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="FanControllerSpy.cpp">
       <Filter>doubles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ContolPanelSpy.h">
+    <ClInclude Include="TargetSpecificDummy.h">
+      <Filter>doubles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaterControllerSpy.h">
+      <Filter>doubles</Filter>
+    </ClInclude>
+    <ClInclude Include="CoolerControllerSpy.h">
+      <Filter>doubles</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeSensorProbe.h">
+      <Filter>doubles</Filter>
+    </ClInclude>
+    <ClInclude Include="FanControllerSpy.h">
       <Filter>doubles</Filter>
     </ClInclude>
   </ItemGroup>

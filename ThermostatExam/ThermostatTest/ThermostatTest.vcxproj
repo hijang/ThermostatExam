@@ -40,26 +40,31 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)CPPUTEST/include;$(SolutionDir)ThermostatExam</AdditionalIncludeDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)CPPUTEST/lib;$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ThermostatExam.lib;CppUTest.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)CPPUTEST/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(OutDir)ThermostatExam.lib;CppUTest.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+    <ProjectReference />
+    <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -80,11 +85,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AllTests.cpp" />
-    <ClCompile Include="ControlPanelSpy.cpp" />
+    <ClCompile Include="CoolerControllSpy.cpp" />
+    <ClCompile Include="FakeSensorProbe.cpp" />
+    <ClCompile Include="FanControllerSpy.cpp" />
+    <ClCompile Include="HeaterContollerSpy.cpp" />
+    <ClCompile Include="TargetSpecificDummy.cpp" />
     <ClCompile Include="ThermostatTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ContolPanelSpy.h" />
+    <ClInclude Include="CoolerControllerSpy.h" />
+    <ClInclude Include="FakeSensorProbe.h" />
+    <ClInclude Include="FanControllerSpy.h" />
+    <ClInclude Include="HeaterControllerSpy.h" />
+    <ClInclude Include="TargetSpecificDummy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

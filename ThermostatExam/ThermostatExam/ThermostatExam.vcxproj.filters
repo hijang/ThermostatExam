@@ -18,7 +18,16 @@
     <ClInclude Include="Thermostat.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ControlPanel.h">
+    <ClInclude Include="HeaterController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CoolerController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SensorProbe.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FanController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +35,16 @@
     <ClCompile Include="Thermostat.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ControlPanel.c">
+    <ClCompile Include="HeaterController.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CoolerController.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SensorProbe.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FanController.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
