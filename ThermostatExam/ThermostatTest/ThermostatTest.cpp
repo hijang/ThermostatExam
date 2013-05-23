@@ -29,55 +29,73 @@ TEST_GROUP(Thermostat)
 	{
 		Thermostat_Destroy();
 	}
+
+	void  whenTemperatureIs(int  temperature)
+	{
+		FakeSensorProbe_SetTemperature(temperature);
+
+		Thermostat_Wakeup();
+	}
+
+	void  heaterShouldBeOff()
+	{
+		CHECK_EQUAL(HEATER_OFF, HeaterControllerSpy_GetLastState());
+	}
+
+	void  heaterShouldBeOnAndRotateOf(int  speed)
+	{
+		CHECK_EQUAL(COOLER_OFF, CoolerControllerSpy_GetLastState());
+		CHECK_EQUAL(HEATER_ON, HeaterControllerSpy_GetLastState());
+		CHECK_EQUAL(speed, FanControllerSpy_GetFanSpeed());
+	}
+
+	void  coolerShouldBeOff()
+	{
+		CHECK_EQUAL(COOLER_OFF, CoolerControllerSpy_GetLastState());
+	}
+
+	void  coolerShouldBeOnAndRotateOf(int  speed)
+	{
+		CHECK_EQUAL(HEATER_OFF, HeaterControllerSpy_GetLastState());
+		CHECK_EQUAL(COOLER_ON, CoolerControllerSpy_GetLastState());
+		CHECK_EQUAL(speed, FanControllerSpy_GetFanSpeed());
+	}
 };
 
 TEST(Thermostat, LEDShouldBeOffWhenInitialState)
 {
-	// 온도조절기가 켜진 직후
+	// 온도조절기가 켜진 직후	
 	
-	
-	// 히터와 쿨러는 모두 꺼져있다.
-	CHECK_EQUAL(HEATER_OFF, HeaterControllerSpy_GetLastState());
-	CHECK_EQUAL(COOLER_OFF, CoolerControllerSpy_GetLastState());
+	heaterShouldBeOff();
+	coolerShouldBeOff();
 }
 
 
 TEST(Thermostat, HeaterShouldBeOnWhenTemperatureIsLowerThanDesired)
 {
-	// 설정 온도가 20도 인데
 	Thermostat_SetDesiredTemperature(20);
 	
-	// 현재 실내 온도가 10도 이면
-	FakeSensorProbe_SetTemperature(10);
+	whenTemperatureIs(10);
 
-	Thermostat_Wakeup();
-
-	// 히터가 가동되어야 한다.
-	CHECK_EQUAL(HEATER_ON, HeaterControllerSpy_GetLastState());
+	heaterShouldBeOnAndRotateOf(200);
 }
 
 TEST(Thermostat, FanShouldRunFastWhenHighDifferential)
 {
 	Thermostat_SetDesiredTemperature(20);
 	
-	FakeSensorProbe_SetTemperature(5);
-
-	Thermostat_Wakeup();
-
-	//송풍팬이 강모드로 돌아야 한다.
-	CHECK_EQUAL(500, FanControllerSpy_GetFanSpeed());
+	whenTemperatureIs(5);
+	
+	heaterShouldBeOnAndRotateOf(500);
 }
 
 TEST(Thermostat, FanShouldRunSlowWhenLowDifferential)
 {
 	Thermostat_SetDesiredTemperature(20);
 		
-	FakeSensorProbe_SetTemperature(17);
+	whenTemperatureIs(17);
 
-	Thermostat_Wakeup();
-
-	//송풍팬이 약모드로 돌아야 한다.
-	CHECK_EQUAL(200, FanControllerSpy_GetFanSpeed());
+	heaterShouldBeOnAndRotateOf(200);
 }
 
 
@@ -85,44 +103,37 @@ TEST(Thermostat, FanShouldStopWhenVeryLowDifferential)
 {
 	Thermostat_SetDesiredTemperature(20);
 		
-	FakeSensorProbe_SetTemperature(19);
+	whenTemperatureIs(19);
 
-	Thermostat_Wakeup();
-
-	//송풍팬이 돌지 않아야한다.
-	CHECK_EQUAL(0, FanControllerSpy_GetFanSpeed());
+	heaterShouldBeOnAndRotateOf(0); // 송풍팬은 정지.
 }
 
 TEST(Thermostat, HeaterTurnOnAndThenOff)
 {
 	Thermostat_SetDesiredTemperature(20);
 		
-	FakeSensorProbe_SetTemperature(10);
-	Thermostat_Wakeup();
+	whenTemperatureIs(10);
 
-	CHECK_EQUAL(HEATER_ON, HeaterControllerSpy_GetLastState());
+	heaterShouldBeOnAndRotateOf(200);
 
-	FakeSensorProbe_SetTemperature(20);
-	Thermostat_Wakeup();
+	// and
+	whenTemperatureIs(20);
 
-	CHECK_EQUAL(HEATER_OFF, HeaterControllerSpy_GetLastState());
-	CHECK_EQUAL(0, FanControllerSpy_GetFanSpeed());
+	heaterShouldBeOff();
 }
 
 TEST(Thermostat, CoolerTurnOnAndThenOff)
 {
 	Thermostat_SetDesiredTemperature(20);
 		
-	FakeSensorProbe_SetTemperature(30);
-	Thermostat_Wakeup();
+	whenTemperatureIs(30);
 
-	CHECK_EQUAL(COOLER_ON, CoolerControllerSpy_GetLastState());
+	coolerShouldBeOnAndRotateOf(200);
 
-	FakeSensorProbe_SetTemperature(20);
-	Thermostat_Wakeup();
 
-	CHECK_EQUAL(COOLER_OFF, CoolerControllerSpy_GetLastState());
-	CHECK_EQUAL(0, FanControllerSpy_GetFanSpeed());
+	whenTemperatureIs(20);
+
+	coolerShouldBeOff();
 }
 
 
@@ -130,16 +141,11 @@ TEST(Thermostat, CoolerTurnOnAndThenOff)
 
 TEST(Thermostat, CoolerShouldBeOnWhenTemperatureIsHigherThanDesired)
 {
-	// 설정 온도가 20도 인데
 	Thermostat_SetDesiredTemperature(20);
 	
-	// 현재 실내 온도가 30도 이면
-	FakeSensorProbe_SetTemperature(30);
-
-	Thermostat_Wakeup();
-
-	// 쿨러가 가동되어야 한다.
-	CHECK_EQUAL(COOLER_ON, CoolerControllerSpy_GetLastState());
+	whenTemperatureIs(30);
+	
+	coolerShouldBeOnAndRotateOf(200);
 }
 
 
@@ -147,16 +153,13 @@ TEST(Thermostat, CoolerTurnOnAndThenHeaterTrunOn)
 {
 	Thermostat_SetDesiredTemperature(20);
 		
-	FakeSensorProbe_SetTemperature(30);
-	Thermostat_Wakeup();
+	whenTemperatureIs(30);
 
-	CHECK_EQUAL(COOLER_ON, CoolerControllerSpy_GetLastState());
-	CHECK_EQUAL(HEATER_OFF, HeaterControllerSpy_GetLastState());
+	coolerShouldBeOnAndRotateOf(200);
 
-	FakeSensorProbe_SetTemperature(10);
-	Thermostat_Wakeup();
 
-	CHECK_EQUAL(COOLER_OFF, CoolerControllerSpy_GetLastState());
-	CHECK_EQUAL(HEATER_ON, HeaterControllerSpy_GetLastState());
+	whenTemperatureIs(10);
+
+	heaterShouldBeOnAndRotateOf(200);
 }
 
