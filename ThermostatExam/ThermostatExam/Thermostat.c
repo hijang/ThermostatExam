@@ -128,17 +128,18 @@ void  Thermostat_Wakeup()
 	const int  currentTemperature = SensorProbe_GetTemperature();
 	const int  differential = abs(currentTemperature - desiredTemperature_);
 
-	HeaterController_TurnOff();
-	CoolerController_TurnOff();
-	FanController_SetFanSpeed(0);
-
-	if (differential == 0)
-		return;  // just all off
+	void (*heaterAction)() = HeaterController_TurnOff;
+	void (*coolerAction)() = CoolerController_TurnOff;
 	
-	if (currentTemperature < desiredTemperature_)
-		HeaterController_TurnOn();
-	else
-		CoolerController_TurnOn();
+	if (differential != 0)
+	{
+		if (currentTemperature < desiredTemperature_)
+			heaterAction = HeaterController_TurnOn;
+		else
+			coolerAction = CoolerController_TurnOn;
+	}
 
+	heaterAction();
+	coolerAction();
 	FanController_SetFanSpeed( determinFanSpeed(differential) );	
 }
